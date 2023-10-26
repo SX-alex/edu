@@ -81,24 +81,24 @@ let cName;
 
 const eduVestingOverlay = document.getElementById('edu-vesting-overlay');
 
-const currentDate = new Date();
-const curYear = currentDate.getFullYear();
-const curMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
-const curDay = String(currentDate.getDate()).padStart(2, '0');
-
-const curDate = `${curDay}.${curMonth}.${curYear}`;
-
-startDate = fieldStartDate.value === '' ? `08.02.2020`: fieldStartDate.value;
-
-const monthsDifference = monthsBetweenDates(curDate, startDate);
-const newDate = addMonthsToDate(startDate,  vesting);
-const nonVestedMonth = monthsBetweenDates(newDate, curDate);
-
 const updateCalculations = () => {
     cliff = fieldCliff.value === '' ? 12 : fieldCliff.value * 12;
     vesting = fieldVesting.value === '' ? 48 : fieldVesting.value * 12;
     exercise = fieldExercise.value === '' ? 12 : fieldExercise.value * 12;
     postVestingOptionPart = cliff / vesting * 100;
+
+    const currentDate = new Date();
+    const curYear = currentDate.getFullYear();
+    const curMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const curDay = String(currentDate.getDate()).padStart(2, '0');
+
+    const curDate = `${curDay}.${curMonth}.${curYear}`;
+
+    startDate = fieldStartDate.value === '' ? `23.10.2022`: fieldStartDate.value;
+
+    const monthsDifference = monthsBetweenDates(curDate, startDate);
+    const newDate = addMonthsToDate(startDate,  vesting);
+    const nonVestedMonth = monthsBetweenDates(newDate, curDate);
 
     let vestedProgress;
     vestedProgress = ( ( optionsPool / ( vesting + cliff ) ) * monthsDifference ) / optionsPool * 100;
@@ -110,7 +110,7 @@ const updateCalculations = () => {
     }
     const year = currentDate.getFullYear();
 
-    optionsPool = fieldOptionsPool.value === '' ? 42300 : fieldOptionsPool.value;
+    optionsPool = fieldOptionsPool.value === '' ? 35000 : fieldOptionsPool.value;
     const startMo = parseInt(startDate.split('.')[1], 10);
     console.log(`startMo: ${startMo}`);
 
@@ -195,6 +195,7 @@ const updateCalculations = () => {
         // Append the new element to eduCalendarDateLayout
         eduCalendarDateLayout.appendChild(newElement);
         updatePreTimelineInfo();
+        updateGraph();
     }
 }
 
@@ -227,14 +228,25 @@ element10.addEventListener("click", function() {
 });
 
 const updateGraph = () => {
-    const inputValue = graphInput.value === '' ? 4000000 : graphInput.value;
-    const postVestingOptionPartValue = optionsPool * postVestingOptionPart/100;
     const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const locStartYear = parseInt(startDate.split('.')[2], 10);
-    const numberOfVestedShares = optionsPool- (( optionsPool - postVestingOptionPartValue ) / vesting) *( ((year + vesting/12) - locStartYear))
-    eduGraphValueLow.textContent = `$${(Math.floor( ( optionsPool / ( vesting + cliff ) ) * monthsDifference )) * multiX}`;
-    eduGraphValueHigh.textContent = `$${ multiX === 10 ? 1000000000 : (Math.floor(inputValue/12000000 *optionsPool))*multiX}`;
+    const curYear = currentDate.getFullYear();
+    const curMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const curDay = String(currentDate.getDate()).padStart(2, '0');
+
+    const curDate = `${curDay}.${curMonth}.${curYear}`;
+
+    startDate = fieldStartDate.value === '' ? `08.02.2020`: fieldStartDate.value;
+
+    const monthsDifference = monthsBetweenDates(curDate, startDate);
+
+    const inputValue = graphInput.value === '' ? 4000000 : graphInput.value;
+
+    if ( monthsDifference < cliff ){
+        eduGraphValueLow.textContent = `$0`
+    }else{
+        eduGraphValueLow.textContent = `$${(Math.floor( ( optionsPool / ( vesting + cliff ) ) * monthsDifference )) * multiX}`;
+    }
+    eduGraphValueHigh.textContent = `$${ multiX === 10 ? 1000000000 : (Math.floor(inputValue/12000000 *optionsPool))*multiX}`
     console.log((optionsPool / ( vesting + cliff ) ) * monthsDifference);
 }
 
