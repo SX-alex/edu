@@ -253,7 +253,7 @@ const updateGraph = () => {
     }else{
         eduGraphValueLow.textContent = `$${(Math.floor( (( optionsPool / ( vesting + cliff ) ) * monthsDifference )*(inputValue/companyShares))) * multiX}`;
     }
-    eduGraphValueHigh.textContent = `$${ multiX === 10 ? 1000000000 : (Math.floor(optionsPool * (inputValue/companyShares)))*multiX}`
+    eduGraphValueHigh.textContent = `$${ multiX === 30 ? 1000000000 : (Math.floor(optionsPool * (inputValue/companyShares)))*multiX}`
     //console.log(`${monthsDifference} monthsDifference`)
     //console.log(((optionsPool / ( vesting + cliff ) ) * monthsDifference));
     //console.log(((optionsPool / ( vesting + cliff ) ) * monthsDifference)*(inputValue/companyShares));
