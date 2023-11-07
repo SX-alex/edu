@@ -190,6 +190,7 @@ const updateCalculations = () => {
     // }
     console.log(`vesting + exercise ${(vesting + exercise)/12}`)
     console.log(`${100 + (-5 + (vesting + exercise)/12) * 5}`)
+    
 }
 
 let multiX = 1;
